@@ -6,8 +6,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
@@ -19,14 +21,16 @@ public class DefautAuton extends SequentialCommandGroup {
   private Hopper m_hopper;
   private Turret m_turret;
   private Timer m_timer = new Timer();
+  private Intake m_intake;
+  private long time;
   
-  public DefautAuton(DriveTrain drivetrain, Shooter shooter, Limelight limelight, Hopper hopper, Turret turret) {
+  public DefautAuton(DriveTrain drivetrain, Shooter shooter, Limelight limelight, Hopper hopper, Turret turret, Intake intake) {
     m_drive = drivetrain;
     m_shooter = shooter;
     m_limelight = limelight;
     m_hopper = hopper;
     m_turret = turret;
-  
+    m_intake = intake;
 
     
   }
@@ -35,18 +39,24 @@ public class DefautAuton extends SequentialCommandGroup {
   @Override
   public void initialize() {
     m_timer.startTimer();
-
+    time = System.currentTimeMillis();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.shooterIdle();
     
-    m_timer.alarm(new Drive(m_drive, .7), 3000);
-    //m_timer.alarm(new Turn(m_drive, 90), 1000);
-    m_timer.alarm3(new HopperUp(m_hopper),new ShooterHigh(m_shooter),new TurretAssist(m_turret, m_limelight) ,3000);
-    m_timer.alarm(new Hold(), 10000);
+    //m_timer.alarm(new TurretAssist(m_turret, m_limelight), 1000);
+   // m_timer.alarm(new IntakeDeploy(m_intake), 500);
+    //m_timer.alarm2(new Drive(m_drive, 12),new IntakeRollers(m_intake, Constants.intakeIn) ,2000);
+    //m_timer.alarm(new Turn(m_drive, 90), 2700);
+    //m_timer.alarm3(new HopperUp(m_hopper),new ShootLow(m_shooter),new TurretAssist(m_turret, m_limelight) ,3000);
+    
+    //m_timer.alarm(new TurretDeadRecon(m_limelight, m_turret), 5000);
+   while(System.currentTimeMillis() <= (time + 5000)){
+     m_turret.turretTurn(m_limelight.deadreckonTurret());
+   }
+    m_timer.alarm(new Hold(), 2000);
 
 
 
@@ -81,9 +91,7 @@ public class DefautAuton extends SequentialCommandGroup {
   @Override
   public void end(boolean interrupted) {
     m_timer.reset();
-    m_drive.drive(0, 0);
-    m_shooter.set(0);
-    m_hopper.set(0);
+    
 
 
   }

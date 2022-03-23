@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import frc.robot.Constants;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 
 
 
@@ -34,6 +36,8 @@ public class DriveTrain extends SubsystemBase {
 
   ADIS16470_IMU imu;
   double m_gyro;
+  DigitalInput channalA1, channalB1, channalIndex1,channalA2, channalB2, channalIndex2;
+  Encoder encoderleft, encoderright, lol;
 
 
   public DriveTrain() {
@@ -43,7 +47,7 @@ public class DriveTrain extends SubsystemBase {
     sparkLeftOne.setSmartCurrentLimit(Constants.driveTrainCurrent);
     sparkLeftOne.setIdleMode(IdleMode.kCoast);
     sparkLeftOne.setInverted(true);
-
+    
     sparkLeftTwo = new CANSparkMax(Constants.sparkLeftTwoID, MotorType.kBrushless);
     sparkLeftTwo.restoreFactoryDefaults();
     sparkLeftTwo.setSmartCurrentLimit(Constants.driveTrainCurrent);
@@ -69,6 +73,42 @@ public class DriveTrain extends SubsystemBase {
     imu = new ADIS16470_IMU();
 
     m_gyro = imu.getAngle();    
+
+    channalA1 = new DigitalInput(0);        // The interger in the () is for what DIO port the encoder is plugged into 
+    channalB1 = new DigitalInput(1);        // Blue wire = Channal A, Yellow wire = Channal B, Green wire = Index Wire
+    channalIndex1 = new DigitalInput(2);
+    encoderleft = new Encoder(channalA1, channalB1, channalIndex1, false);
+
+    channalA2 = new DigitalInput(3);        // The interger in the () is for what DIO port the encoder is plugged into 
+    channalB2 = new DigitalInput(4);        // Blue wire = Channal A, Yellow wire = Channal B, Green wire = Index Wire
+    channalIndex2 = new DigitalInput(5);
+    encoderright = new Encoder(channalA2, channalB2, channalIndex2, false);
+
+    encoderleft.setDistancePerPulse(0.000511);
+    encoderright.setDistancePerPulse(0.000511);
+  }
+  int count = 0;
+  public void driveForward(int feet){
+    
+    if(encoderleft.getDistance() == 1.5){
+      count = count + 1;
+    }
+     
+    if(encoderleft.getDistance() == -1.5){
+      count = count - 1;
+    }
+
+    while(Math.abs(count) <= feet){
+      
+      m_drive.tankDrive(-.5, -.5);
+    }
+    
+
+    System.out.println(count);
+  }
+  public void resetEncoder() {
+    encoderleft.reset();
+    encoderright.reset();
   }
   /**
    * 
@@ -84,6 +124,10 @@ public class DriveTrain extends SubsystemBase {
   }
   public void log(){
     SmartDashboard.putNumber("Gyro", m_gyro);
+    SmartDashboard.putNumber("Encoder", encoderleft.getDistance());
+    SmartDashboard.putNumber("Count", count);
+
+
   }
   public void turn(double degree){
     double turn = m_gyro + degree;

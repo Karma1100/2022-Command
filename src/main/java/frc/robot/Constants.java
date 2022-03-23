@@ -27,9 +27,8 @@ public final class Constants {
     public static final int sparkShooterOneID = 14;
     public static final int sparkShooterTwoID = 15;
     public static final int sparkTurret = 16;
-
-
-
+    public static final int sparkIntakeVertial = 17;
+    public static final int sparkIntakeIn = 18;
     public static final int sparkHopperOneID = 19;
     public static final int sparKHopperTwoID = 20;
 
@@ -59,6 +58,16 @@ public final class Constants {
     public static final double kP = 1;
     public static final double kI = .0005;
     public static final double kD = .00005;
+
+    public static final double intakeIn = 1;
+    public static final double intakeOut = 1;
+
+    public static final double intakeDown = .85;
+    public static final double intakeUp = .5;
+
+
+
+
 
 
 

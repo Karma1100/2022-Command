@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.HopperDown;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -17,18 +18,17 @@ import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Auto2;
 import frc.robot.commands.BoostDrive;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.HopperUp;
 import frc.robot.commands.LiftDown;
 import frc.robot.commands.LiftUp;
-import frc.robot.commands.Run;
 import frc.robot.commands.ShootLow;
 import frc.robot.commands.ShooterAssist;
 import frc.robot.commands.ShooterHigh;
-import frc.robot.commands.ShooterIdle;
 import frc.robot.commands.TurretAssist;
-import frc.robot.controllers.ControllerAxisToButton;
+import frc.robot.commands.TurretDeadRecon;
 import frc.robot.controllers.StickJoy;
 import frc.robot.controllers.Xbox;
 import frc.robot.commands.DefaultTurret;
@@ -49,6 +49,7 @@ public class RobotContainer {
   private final Hopper m_hopper = new Hopper();
   private final Limelight m_limelight = new Limelight();
   private final Lift m_lift = new Lift();
+  private final Intake m_intake = new Intake();
 
   
 
@@ -65,7 +66,8 @@ public class RobotContainer {
   double turretwoosh = controller.getRawAxis(2);
 
   private final CommandBase m_autonomousCommand =
-      new DefautAuton(m_DriveTrain, m_shooter, m_limelight, m_hopper, m_turret);
+      new DefautAuton(m_DriveTrain, m_shooter, m_limelight, m_hopper, m_turret, m_intake);
+     //new Auto2(m_DriveTrain);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -118,7 +120,8 @@ public class RobotContainer {
     liftUp.whenHeld(new LiftUp(m_lift));
     liftDown.whenHeld(new LiftDown(m_lift));
     //untested
-    turretAssist.whenHeld(new TurretAssist(m_turret, m_limelight));
+    //turretAssist.whenHeld(new TurretAssist(m_turret, m_limelight));
+    turretAssist.whenHeld(new TurretDeadRecon(m_limelight, m_turret));
     //untested
     shooterAssist.whenHeld(new ShooterAssist(m_shooter, m_limelight));
     

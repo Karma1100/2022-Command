@@ -9,21 +9,23 @@ import frc.robot.subsystems.DriveTrain;
 
 public class Drive extends CommandBase {
   DriveTrain m_drive;
-  double m_power;
-  public Drive(DriveTrain drive, double power) {
+  int m_power;
+  public Drive(DriveTrain drive, int feet) {
   m_drive = drive;
-  m_power = -power;
+  m_power = feet;
   }
 
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_drive.driveForward(m_power);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.boostDrive(m_power, m_power);
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -35,6 +37,6 @@ public class Drive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

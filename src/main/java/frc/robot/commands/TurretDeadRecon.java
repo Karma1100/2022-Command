@@ -5,18 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Turret;
 
-public class TurretAssist extends CommandBase {
-  Turret m_Turret;
-  Limelight m_Limelight;
-  double m_speed;
-
-  public TurretAssist(Turret turret, Limelight limelight) {
-    m_Turret = turret;
-    m_Limelight = limelight;
-
+public class TurretDeadRecon extends CommandBase {
+  private Limelight m_limelight;
+  private Turret m_turret;
+  public TurretDeadRecon(Limelight limelight, Turret turret) {
+    m_limelight = limelight;
+    m_turret = turret;
   }
 
   // Called when the command is initially scheduled.
@@ -26,15 +23,13 @@ public class TurretAssist extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_speed = m_Limelight.turretRotationAssist();
-    m_Turret.turretTurn(m_speed);
-    
+    m_turret.turretTurn(m_limelight.deadreckonTurret()); ;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_Turret.turretTurn(0);
+    
   }
 
   // Returns true when the command should end.

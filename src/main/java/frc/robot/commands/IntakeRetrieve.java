@@ -4,12 +4,15 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Intake;
+
 
 public class IntakeRetrieve extends CommandBase {
-  /** Creates a new IntakeRetrieve. */
-  public IntakeRetrieve() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private Intake m_intake;
+  public IntakeRetrieve(Intake intake) {
+    m_intake = intake;
   }
 
   // Called when the command is initially scheduled.
@@ -18,7 +21,9 @@ public class IntakeRetrieve extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_intake.setPistons(Value.kReverse);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

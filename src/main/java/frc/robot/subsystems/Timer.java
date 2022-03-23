@@ -51,7 +51,6 @@ public class Timer extends SubsystemBase {
       command.execute();
     }
     command.end(true);
-    autonTimer = autonTimer - timel;
   }
   public void alarm2(Command command, Command command2,long timel){
     increaseTime(timel);

@@ -16,7 +16,7 @@ public class Xbox extends SubsystemBase {
   }
   public double getRightAxisX(){
     double lol = m_jJoystick.getRawAxis(2);
-    return lol;
+    return -lol;
   }
 
   public boolean getRawButtonX(int boop){

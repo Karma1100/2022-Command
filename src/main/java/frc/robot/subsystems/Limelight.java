@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import frc.robot.subsystems.Turret;
 
 public class Limelight extends SubsystemBase {
   private NetworkTable limelightTable;
@@ -31,14 +32,14 @@ public class Limelight extends SubsystemBase {
   }
 
   public double turretRotationAssist(){
-    PIDController PIDtargetX = new PIDController(1, .0005, .00005);
+    final PIDController PIDtargetX = new PIDController(1, .0005, .00005);
 
     PIDtargetX.setSetpoint(0);
 
     double pidTargetXturretOutput = PIDtargetX.calculate(targetx);
 
     turretSpeed = pidTargetXturretOutput * .015;
-    PIDtargetX.close(); 
+     
     return (turretSpeed);
     
   }
@@ -47,6 +48,28 @@ public class Limelight extends SubsystemBase {
       return true;
     }else{
       return false;
+    }
+  }
+  
+  public double deadreckonTurret(){
+    if(targetx > 15){
+      return -.25;
+    }else if(targetx > 10){
+      return -.15;
+    }else if(targetx > 5){
+      return -.010;
+    }else if(targetx > 3){
+      return -.05;
+    }else if(targetx < -15){
+      return .25;
+    }else if(targetx < -10){
+      return .15;
+    }else if(targetx < -5){
+      return .10;
+    }else if(targetx < -3){
+      return .05;
+    }{
+      return 0;
     }
   }
 
