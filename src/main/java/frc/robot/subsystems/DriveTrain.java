@@ -87,24 +87,16 @@ public class DriveTrain extends SubsystemBase {
     encoderleft.setDistancePerPulse(0.000511);
     encoderright.setDistancePerPulse(0.000511);
   }
-  int count = 0;
-  public void driveForward(int feet){
-    
-    if(encoderleft.getDistance() == 1.5){
-      count = count + 1;
-    }
-     
-    if(encoderleft.getDistance() == -1.5){
-      count = count - 1;
-    }
+  double count;
 
-    while(Math.abs(count) <= feet){
-      
-      m_drive.tankDrive(-.5, -.5);
-    }
-    
-
-    System.out.println(count);
+  public boolean driveForward(){
+      if(Math.abs(count) <= Constants.AutoMove){
+        return true;
+      }
+      return false;
+  }
+  public void resetCount(){
+    count = 0;
   }
   public void resetEncoder() {
     encoderleft.reset();
@@ -125,7 +117,6 @@ public class DriveTrain extends SubsystemBase {
   public void log(){
     SmartDashboard.putNumber("Gyro", m_gyro);
     SmartDashboard.putNumber("Encoder", encoderleft.getDistance());
-    SmartDashboard.putNumber("Count", count);
 
 
   }
@@ -145,5 +136,13 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     log();
+    if(encoderleft.getDistance() >= 1.5){
+      count = count - 1;
+    }
+     
+    if(encoderleft.getDistance() <= -1.5){
+      count = count + 1;
+    }
+    //SmartDashboard.putNumber("count", count);
   }
 }

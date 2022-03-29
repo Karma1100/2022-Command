@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.io.ObjectInputFilter.Status;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -41,6 +43,8 @@ public final class Constants {
     public static final int turretCurrentLimit = 20;
     public static final int shooterCurrentLimit = 80;
     public static final int liftCurrentLimit = 60;
+    public static final int intakeCurrentLimit = 25;
+
 
     public static final double hopperSpeedUp = -.5;
     public static final double hopperSpeedDown = .5;
@@ -50,13 +54,13 @@ public final class Constants {
 
     public static final int boostButton = 1;
 
-    public static final double TurretPIDFactor = .02;
+    public static final double TurretPIDFactor = .023;
 
-    public static final double LowShotFactor = -.3;
-    public static final double HighShotFactor = -.9;
+    public static final double LowShotFactor = -.35;
+    public static final double HighShotFactor = -.65;
 
     public static final double kP = 1;
-    public static final double kI = .0005;
+    public static final double kI = .005;
     public static final double kD = .00005;
 
     public static final double intakeIn = 1;
@@ -65,6 +69,7 @@ public final class Constants {
     public static final double intakeDown = .85;
     public static final double intakeUp = .5;
 
+    public static final int AutoMove = 5;
 
 
 

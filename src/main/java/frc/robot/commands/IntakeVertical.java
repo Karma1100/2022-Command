@@ -4,15 +4,17 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 public class IntakeVertical extends CommandBase {
   private Intake m_intake;
-  private double m_speed;
-    public IntakeVertical(Intake intake, double speed) {
+  DoubleSupplier m_speed;
+    public IntakeVertical(Intake intake, DoubleSupplier speed) {
       m_intake = intake;
       m_speed = speed;
-
+      addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -22,7 +24,7 @@ public class IntakeVertical extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.setVertical(m_speed);
+    m_intake.setVertical(m_speed.getAsDouble()* .25);
   }
 
   // Called once the command ends or is interrupted.

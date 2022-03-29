@@ -4,39 +4,46 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Timer;
 
-public class Turn extends CommandBase {
+public class DriveForward extends CommandBase {
   DriveTrain m_drive;
   Timer m_timer;
-  public Turn(DriveTrain drive, Timer timer) {
+  int duration;
+  public  DriveForward(DriveTrain drive, int duration) {
     m_drive = drive;
-    m_timer = timer;
+    this.duration = duration;
+    m_timer = new Timer();
+    addRequirements(drive);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_timer.stop();
+    m_timer.reset();
+    m_timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_timer.alarm(new Rotate(m_drive), 2700);
-    this.isFinished();
+    m_drive.boostDrive(-.5, -.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_drive.drive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    m_drive.drive(0, 0);
-
-    return true;
+    return m_timer.get() >= duration || !DriverStation.isAutonomous();
   }
 }

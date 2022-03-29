@@ -23,7 +23,7 @@ public class TurretDeadRecon extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_turret.turretTurn(m_limelight.deadreckonTurret()); ;
+    m_turret.turretTurn(m_limelight.deadreckonTurret() ); ;
   }
 
   // Called once the command ends or is interrupted.

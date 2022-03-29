@@ -4,29 +4,38 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Timer;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Turret;
 
-public class IntakeDeploy extends CommandBase {
-  private Intake m_intake;
-  public IntakeDeploy(Intake intake) {
-    m_intake = intake;
-    addRequirements(intake);
-
+public class Targeting extends CommandBase {
+  Limelight m_limelight;
+  Turret m_turret;
+  public Targeting(Limelight limelight, Turret turret) {
+    m_limelight = limelight;
+    m_turret = turret;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    while(m_limelight.OnTarget2() == false && DriverStation.isAutonomous() == true){
+      m_limelight.periodic();
 
-    m_intake.swtichPistons();//KRreverse is intake extend
-    
+      m_turret.turretTurn(.23);
+      if(m_limelight.OnTarget2() == true){
+        m_turret.turretTurn(0);
+        break;
+      }
+    }
+    this.isFinished();
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +45,7 @@ public class IntakeDeploy extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    m_turret.turretTurn(0);
     return true;
   }
 }

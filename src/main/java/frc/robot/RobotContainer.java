@@ -18,10 +18,12 @@ import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Auto2;
 import frc.robot.commands.BoostDrive;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.HopperUp;
+import frc.robot.commands.IntakeDeploy;
+import frc.robot.commands.IntakeRollers;
+import frc.robot.commands.IntakeVertical;
 import frc.robot.commands.LiftDown;
 import frc.robot.commands.LiftUp;
 import frc.robot.commands.ShootLow;
@@ -44,12 +46,13 @@ import frc.robot.commands.DefautAuton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain m_DriveTrain = new DriveTrain();
-  private final Turret m_turret = new Turret();
   private final Shooter m_shooter = new Shooter();
   private final Hopper m_hopper = new Hopper();
   private final Limelight m_limelight = new Limelight();
   private final Lift m_lift = new Lift();
   private final Intake m_intake = new Intake();
+  private final Turret m_turret = new Turret(m_limelight);
+
 
   
 
@@ -75,10 +78,10 @@ public class RobotContainer {
     //Inoder to use any kind of Axis you must use a DoubleSupplier and then pass it through
     //getY is a method in the Joystick class that gets the values from the specified axis. This is the same as GetRawAxis()
     m_turret.setDefaultCommand(new DefaultTurret(m_turret, m_controller::getRightAxisX));
+    m_intake.setDefaultCommand(new IntakeVertical(m_intake, m_controller::getLeftAxisY));
 
     m_DriveTrain.setDefaultCommand(new DefaultDrive(m_DriveTrain, m_left::getAxisY, m_right::getAxisY));
     //m_shooter.setDefaultCommand(new ShooterIdle(m_shooter));
-
     configureButtonBindings();
   }
 
@@ -92,16 +95,19 @@ public class RobotContainer {
     //Built in class that allows me to pull buttons
     final JoystickButton hopperUp = new JoystickButton(controller, 5);
     final JoystickButton hopperDown = new JoystickButton(controller, 6);
-    final JoystickButton HighShot =  new JoystickButton(controller, 7);  //I have to change these
-    final JoystickButton LowShot = new JoystickButton(controller, 8);
+    final JoystickButton HighShot =  new JoystickButton(controller, 8);  //I have to change these
+    final JoystickButton LowShot = new JoystickButton(controller, 7);
     final JoystickButton liftUp = new JoystickButton(controller, 1);
     final JoystickButton liftDown = new JoystickButton(controller, 4);
+    final JoystickButton intakeIn = new JoystickButton(controller, 2);
+    final JoystickButton intakeOut = new JoystickButton(controller, 3);
 
     final JoystickButton boost = new JoystickButton(leftJoy, 1);
     final JoystickButton boost2 = new JoystickButton(rightJoy, 1);
 
     final JoystickButton turretAssist = new JoystickButton(controller, 12);
     final JoystickButton shooterAssist = new JoystickButton(controller, 10);
+    final JoystickButton IntakeDeploy = new JoystickButton(controller, 11);
     
     // hopper up is the custom command and .whenHeld is from the Button class. It needs a boolean to activate 
     //working
@@ -120,10 +126,14 @@ public class RobotContainer {
     liftUp.whenHeld(new LiftUp(m_lift));
     liftDown.whenHeld(new LiftDown(m_lift));
     //untested
-    //turretAssist.whenHeld(new TurretAssist(m_turret, m_limelight));
-    turretAssist.whenHeld(new TurretDeadRecon(m_limelight, m_turret));
+    turretAssist.whenHeld(new TurretAssist(m_turret, m_limelight));
+    //turretAssist.whenHeld(new TurretDeadRecon(m_limelight, m_turret));
     //untested
     shooterAssist.whenHeld(new ShooterAssist(m_shooter, m_limelight));
+    IntakeDeploy.whenPressed(new IntakeDeploy(m_intake));
+    intakeIn.whenHeld(new IntakeRollers(m_intake, 1));
+    intakeOut.whenHeld(new IntakeRollers(m_intake, -1));
+
     
 
 

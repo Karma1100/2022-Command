@@ -21,34 +21,43 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry tx, ty;
   private double targetx, targety;
   private double defaultValue;
+  final PIDController PIDtargetX;
   double turretSpeed;
-
 
   public Limelight() {
     limelightTable =  NetworkTableInstance.getDefault().getTable("limelight");
     tx = limelightTable.getEntry("tx");
     ty = limelightTable.getEntry("ty");
+    PIDtargetX = new PIDController(1, .0005, .00005);
+    PIDtargetX.setSetpoint(0);
 
   }
 
-  public double turretRotationAssist(){
-    final PIDController PIDtargetX = new PIDController(1, .0005, .00005);
-
-    PIDtargetX.setSetpoint(0);
-
+  public void turretRotationAssist(){
     double pidTargetXturretOutput = PIDtargetX.calculate(targetx);
 
     turretSpeed = pidTargetXturretOutput * .015;
      
-    return (turretSpeed);
+    //return (turretSpeed);
     
   }
-  public boolean fire(){
-    if(targetx >= 5 && targetx <= -5){
+  public boolean OnTarget(){
+    if(targetx <= 3 && targetx >= -3 && targetx != 0){
       return true;
     }else{
       return false;
     }
+  }
+  public boolean OnTarget2(){
+    if(targetx <= 10 && targetx >= -10 && targetx != 0){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public double getTurretSpeed(){
+      return turretSpeed;
   }
   
   public double deadreckonTurret(){
@@ -80,13 +89,15 @@ public class Limelight extends SubsystemBase {
   public void log(){
     SmartDashboard.putNumber("TX", targetx);
     SmartDashboard.putNumber("TY", targety);
-    SmartDashboard.putNumber("TurretSpeed", turretSpeed);
+   // SmartDashboard.putNumber("TurretSpeed", turretSpeed);
   }
   
   @Override
   public void periodic() {
     targetx = tx.getDouble(defaultValue);
     targety = ty.getDouble(defaultValue);
+    this.turretRotationAssist();
     log();
+    this.OnTarget();
   }
 }

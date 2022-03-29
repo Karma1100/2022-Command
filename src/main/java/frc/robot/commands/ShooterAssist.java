@@ -23,7 +23,7 @@ public class ShooterAssist extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_limelight.fire() == true){
+    if(m_limelight.OnTarget() == true){
       m_shooter.assistedHighShot();
     }else{
       m_limelight.turretRotationAssist();

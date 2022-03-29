@@ -6,14 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Timer;
 
-public class Turn extends CommandBase {
-  DriveTrain m_drive;
+public class ShooterAuto extends CommandBase {
+  Shooter m_shooter;
   Timer m_timer;
-  public Turn(DriveTrain drive, Timer timer) {
-    m_drive = drive;
-    m_timer = timer;
+  Hopper m_hoper;
+  public ShooterAuto(Shooter shoot, Timer time, Hopper hopper) {
+  m_shooter = shoot;
+  m_timer = time;
+  m_hoper = hopper;
   }
 
   // Called when the command is initially scheduled.
@@ -23,20 +27,18 @@ public class Turn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_timer.alarm(new Rotate(m_drive), 2700);
+    m_timer.alarm2(new ShooterHighAuto(m_shooter), new HopperUp(m_hoper), 3000);
     this.isFinished();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    m_drive.drive(0, 0);
-
+    m_shooter.set(0);
     return true;
   }
 }

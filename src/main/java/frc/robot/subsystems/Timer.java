@@ -50,7 +50,7 @@ public class Timer extends SubsystemBase {
     while(System.currentTimeMillis() <= counter){
       command.execute();
     }
-    command.end(true);
+    command.isFinished();
   }
   public void alarm2(Command command, Command command2,long timel){
     increaseTime(timel);

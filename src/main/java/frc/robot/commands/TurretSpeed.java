@@ -5,15 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Timer;
+import frc.robot.subsystems.Turret;
 
-public class Turn extends CommandBase {
-  DriveTrain m_drive;
-  Timer m_timer;
-  public Turn(DriveTrain drive, Timer timer) {
-    m_drive = drive;
-    m_timer = timer;
+public class TurretSpeed extends CommandBase {
+  /** Creates a new TurretSpeed. */
+  Turret m_Turret;
+
+  double m_speed;
+
+  public TurretSpeed(Turret turret, double speed) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_Turret = turret;
+    addRequirements(m_Turret);
   }
 
   // Called when the command is initially scheduled.
@@ -23,20 +26,16 @@ public class Turn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_timer.alarm(new Rotate(m_drive), 2700);
-    this.isFinished();
-  }
+      m_Turret.turretTurn(m_speed);
+    }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    m_drive.drive(0, 0);
-
-    return true;
+    return false;
   }
 }
